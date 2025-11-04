@@ -13,7 +13,7 @@ def test_generate_endpoint():
         "type": "story"
     }
     try:
-        response = requests.post(f"{BASE_URL}/generate", json=payload)
+        response = requests.post(f"{BASE_URL}/generate", json=payload, timeout=10)
         if response.status_code == 200:
             data = response.json()
             print("✓ Generate endpoint working")

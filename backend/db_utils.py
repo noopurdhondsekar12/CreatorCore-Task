@@ -48,7 +48,11 @@ def get_latest(topic: str):
     """
     if db is None:
         return {"topic": topic, "output_text": "Mock latest output", "timestamp": "2023-10-01T12:00:00Z"}
-    return generations_collection.find_one({"topic": topic}, sort=[("timestamp", -1)])
+    doc = generations_collection.find_one({"topic": topic}, sort=[("timestamp", -1)])
+    if doc:
+        # Convert ObjectId to string for JSON serialization
+        doc["_id"] = str(doc["_id"])
+    return doc
 
 def update_feedback(id: str, feedback: str):
     """
