@@ -3,12 +3,13 @@ import json
 from datetime import datetime
 from db_utils import insert_generation, get_latest, update_feedback
 from prompts import story_prompt, ad_script_prompt, podcast_script_prompt
+from embeddings_utils import generate_embedding, store_embedding, find_similar_generations
 import os
 
 app = Flask(__name__)
 
 # Load schema
-with open('utils/schema.json', 'r') as f:
+with open('backend/utils/schema.json', 'r') as f:
     schema = json.load(f)
 
 # Mock Gemini integration (replace with actual LangChain + Gemini later)
@@ -71,11 +72,19 @@ def generate():
     # Insert into database
     generation_id = insert_generation(log_data)
 
+    # Generate and store embedding for the output
+    embedding = generate_embedding(result["output_text"])
+    store_embedding(generation_id, embedding)
+
+    # Find related context (top-3 similar generations)
+    related_context = find_similar_generations(embedding, topic=topic, top_k=3, score_weight=0.1)
+
     return jsonify({
         "id": generation_id,
         "topic": topic,
         "output_text": result["output_text"],
-        "tokens_used": result["tokens_used"]
+        "tokens_used": result["tokens_used"],
+        "related_context": related_context
     })
 
 @app.route('/feedback', methods=['POST'])

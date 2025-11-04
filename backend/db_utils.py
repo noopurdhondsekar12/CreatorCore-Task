@@ -52,15 +52,37 @@ def get_latest(topic: str):
 
 def update_feedback(id: str, feedback: str):
     """
-    Update the feedback for a generation by its ID.
+    Update the feedback for a generation by its ID and calculate feedback score.
     """
     if db is None:
         print(f"Mock update feedback for {id}: {feedback}")
         return True
+
+    # Scoring logic: positive keywords increase score, negative decrease
+    positive_keywords = ["good", "great", "excellent", "amazing", "love", "like", "perfect", "awesome"]
+    negative_keywords = ["bad", "terrible", "awful", "hate", "dislike", "poor", "worst", "horrible"]
+
+    feedback_lower = feedback.lower()
+    score_change = 0
+
+    for word in positive_keywords:
+        if word in feedback_lower:
+            score_change += 0.5
+
+    for word in negative_keywords:
+        if word in feedback_lower:
+            score_change -= 0.5
+
     from bson import ObjectId
+    # Get current score
+    doc = generations_collection.find_one({"_id": ObjectId(id)})
+    current_score = doc.get("feedback_score", 0.0) if doc else 0.0
+
+    new_score = current_score + score_change
+
     result = generations_collection.update_one(
         {"_id": ObjectId(id)},
-        {"$set": {"feedback": feedback}}
+        {"$set": {"feedback": feedback, "feedback_score": new_score}}
     )
     return result.modified_count > 0
 
