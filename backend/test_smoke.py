@@ -2,7 +2,7 @@ import requests
 import json
 import time
 
-BASE_URL = "http://localhost:5000"
+BASE_URL = "http://localhost:5001"
 
 def test_generate_endpoint():
     """Test the /generate endpoint"""

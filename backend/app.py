@@ -6,7 +6,12 @@ from prompts import story_prompt, ad_script_prompt, podcast_script_prompt
 from embeddings_utils import generate_embedding, store_embedding, find_similar_generations
 import os
 
-app = Flask(__name__)
+app = Flask(__name__)   # <-- Flask app created here
+
+@app.route('/')
+def home():
+    return "✅ CreatorCore Context Intelligence Backend is running successfully!"
+
 
 # Load schema
 with open('backend/utils/schema.json', 'r') as f:
@@ -119,6 +124,7 @@ def history(topic):
         return jsonify(latest)
     else:
         return jsonify({"error": "No generations found for this topic"}), 404
-
+    
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5001, debug=True)
+
