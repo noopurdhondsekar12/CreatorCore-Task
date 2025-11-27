@@ -22,9 +22,14 @@
 - ✅ Context retrieval with embeddings
 - ✅ Scoring logic with multiple feedback iterations
 
-## Manual Requirements
-- ⏳ 1-minute demo recording (code ready)
-- ⏳ In-office handover and integration
+## Runtime Verification Required
+- ⏳ Test /generate endpoint returns top-3 related_context with correct scores
+- ⏳ Verify similarity search reliability and embedding correctness
+- ⏳ Run migrate_embeddings.py and confirm backfill + logging
+- ⏳ Execute test suite and verify all scenarios pass
+- ⏳ Record 1-minute demo: generate → feedback → context retrieval → similarity results
+- ⏳ In-office handover with live backend demonstration
+- ⏳ Integration confirmation with Core Integrator
 - ⏳ Central Task Bank submission
 
-All technical specifications verified. Ready for manual testing and handover.
+Code implementation complete and spec-compliant. Requires runtime testing and human workflow completion.

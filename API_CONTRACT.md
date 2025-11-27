@@ -114,5 +114,6 @@ Response:
 ## Integration Notes
 - All requests/responses are JSON
 - Embeddings use sentence-transformers all-MiniLM-L6-v2
-- Related context uses ranking: 0.7 * similarity + 0.3 * normalized_score
-- Scores are cumulative and adjusted by feedback commands
+- Related context ranking formula: 0.7 * cosine_similarity + 0.3 * normalized_feedback_score
+- Score normalization: (score - min_score) / (max_score - min_score) across all generations
+- Scores are cumulative and adjusted by feedback commands (+2, -1, etc.)
